@@ -83,6 +83,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PasswordCategory.cpp" />
     <ClCompile Include="PasswordEntry.cpp" />
+    <ClCompile Include="PasswordManager.cpp" />
     <ClCompile Include="Security.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +92,7 @@
     <ClInclude Include="KeyRing.h" />
     <ClInclude Include="PasswordCategory.h" />
     <ClInclude Include="PasswordEntry.h" />
+    <ClInclude Include="PasswordManager.h" />
     <ClInclude Include="Security.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
