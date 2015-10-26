@@ -9,14 +9,14 @@
 #include <sstream>
 
 #include <boost/filesystem/fstream.hpp>
-#include "CategoryManager.h"
+#include "PasswordManager.h"
 
 namespace Security {
 	using namespace CryptoPP;
 	using namespace boost;
 
-	bool LoadCategories(filesystem::ifstream&, CategoryManager&, const std::string&);
-	void SaveCategories(filesystem::ofstream&, const CategoryManager&, const std::string&);
+	bool LoadCategories(std::istream&, PasswordManager&, const std::string&);
+	void SaveCategories(std::ostream&, const PasswordManager&, const std::string&);
 
 	void DeriveKey(const std::string&, const byte*, size_t, byte*, size_t);
 	void DecodeData(const byte*, byte*, size_t, const byte*, size_t, const byte*, size_t);
@@ -24,15 +24,15 @@ namespace Security {
 
 	bool CompareHash(const byte*, const byte*, size_t);
 
-	void Deserialize(CategoryManager&, std::stringstream&);
-	void Serialize(const CategoryManager&, std::stringstream&);
-	size_t GetSerializedSize(const CategoryManager&);
+	void Deserialize(PasswordManager&, std::istream&);
+	void Serialize(const PasswordManager&, std::ostream&);
+	size_t GetSerializedSize(const PasswordManager&);
 	
-	size_t ReadSize(std::stringstream&);
-	std::string ReadString(std::stringstream&);
+	size_t ReadSize(std::istream&);
+	std::string ReadString(std::istream&);
 
-	void WriteSize(std::stringstream&, size_t);
-	void WriteString(std::stringstream&, const std::string&);
+	void WriteSize(std::ostream&, size_t);
+	void WriteString(std::ostream&, const std::string&);
 
 	const int32_t passwordIterations = 10000;
 };

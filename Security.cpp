@@ -1,9 +1,10 @@
 #include "Security.h"
+#include "StreamUtils.h"
 
 using namespace CryptoPP;
 using namespace boost;
 
-bool Security::LoadCategories(filesystem::ifstream& in, CategoryManager& manager, const std::string& password) {
+bool Security::LoadCategories(std::istream& in, PasswordManager& manager, const std::string& password) {
 	if (in.good()) {
 		byte iv[AES::BLOCKSIZE];
 		byte salt[AES::MAX_KEYLENGTH];
@@ -41,11 +42,11 @@ bool Security::LoadCategories(filesystem::ifstream& in, CategoryManager& manager
 		}
 	}
 	else {
-		throw std::runtime_error("File is in bad state.");
+		throw std::runtime_error("Stream is in a bad state.");
 	}
 }
 
-void Security::SaveCategories(filesystem::ofstream& out, const CategoryManager& manager, const std::string& password) {
+void Security::SaveCategories(std::ostream& out, const PasswordManager& manager, const std::string& password) {
 	if (out.good()) {
 		byte iv[AES::BLOCKSIZE];
 		byte salt[AES::MAX_KEYLENGTH];
@@ -109,76 +110,39 @@ bool Security::CompareHash(const byte* hash, const byte* data, size_t size) {
 	return SHA256().VerifyDigest(hash, data, size);
 }
 
-void Security::Deserialize(CategoryManager& manager, std::stringstream& stream) {
-	size_t nCategories = ReadSize(stream);
+void Security::Deserialize(PasswordManager& manager, std::istream& stream) {
+	uint16_t nEntries = ReadType<uint16_t>(stream);
 
-	for (size_t i = 0; i < nCategories; ++i) {
-		std::string categoryName = ReadString(stream);
-		size_t nEntries = ReadSize(stream);
+	for (uint16_t i = 0; i < nEntries; ++i) {
+		std::string entryTag = ReadType<std::string>(stream);
+		std::string entryUsername = ReadType<std::string>(stream);
+		std::string entryPassword = ReadType<std::string>(stream);
 
-		size_t categoryIndex = manager.AddCategory(categoryName);
-
-		for (size_t j = 0; j < nEntries; ++j) {
-			std::string entryUsername = ReadString(stream);
-			std::string entryPassword = ReadString(stream);
-
-			manager.GetCategory(categoryIndex).AddEntry(entryUsername, entryPassword);
-		}
+		manager.AddEntry(entryTag, entryUsername, entryPassword);
 	}
 }
 
-void Security::Serialize(const CategoryManager& manager, std::stringstream& stream) {
-	const auto& categories = manager.GetCategories();
-	WriteSize(stream, categories.size());
+void Security::Serialize(const PasswordManager& manager, std::ostream& stream) {
+	const auto& entries = manager.GetEntries();
 
-	for (auto&& category : categories) {
-		WriteString(stream, category.GetName());
+	if (entries.size() >= std::numeric_limits<uint16_t>::max())
+		throw std::runtime_error("Max entry limit reached. Cannot save.");
 
-		const auto& entries = category.GetEntries();
-		WriteSize(stream, entries.size());
-		for (auto&& entry = entries.begin(); entry != entries.end(); ++entry) {
-			WriteString(stream, entry->GetUsername());
-			WriteString(stream, entry->GetPassword());
-		}
+	WriteType(stream, static_cast<uint16_t>(entries.size()));
+
+	for (auto&& entry = entries.begin(); entry != entries.end(); ++entry) {
+		WriteType(stream, entry->GetTag());
+		WriteType(stream, entry->GetUsername());
+		WriteType(stream, entry->GetPassword());
 	}
 }
 
-size_t Security::GetSerializedSize(const CategoryManager& manager) {
-	size_t size = 0;
+size_t Security::GetSerializedSize(const PasswordManager& manager) {
+	size_t size = 4; // entry count
+	const auto& entries = manager.GetEntries();
 
-	size += 4; // category count
-
-	const auto& categories = manager.GetCategories();
-
-	for (auto&& category : categories) {
-		size += 4 + category.GetName().size() + 4; // category count + string size + string
-
-		const auto& entries = category.GetEntries();
-		for (auto&& entry : entries)
-			size += entry.GetUsername().size() + entry.GetPassword().size() + 8; // username string + password string + 2 string sizes
-	}
+	for (auto&& entry : entries)
+		size += entry.GetTag().size() + entry.GetUsername().size() + entry.GetPassword().size() + 12; // username string + password string + 3 string sizes
 
 	return size;
-}
-
-size_t Security::ReadSize(std::stringstream& stream) {
-	char buf[sizeof(size_t)];
-	stream.read(buf, sizeof(size_t));
-	return *(reinterpret_cast<size_t*>(buf));
-}
-
-std::string Security::ReadString(std::stringstream& stream) {
-	size_t size = ReadSize(stream);
-	std::unique_ptr<char[]> data(new char[size]);
-	stream.read(data.get(), size);
-	return std::string(data.get(), size);
-}
-
-void Security::WriteSize(std::stringstream& stream, size_t n) {
-	stream.write(reinterpret_cast<char*>(&n), sizeof(size_t));
-}
-
-void Security::WriteString(std::stringstream& stream, const std::string& string) {
-	WriteSize(stream, string.size());
-	stream.write(string.c_str(), string.size());
 }

@@ -5,6 +5,7 @@
 
 class PasswordManager
 {
+public:
 	PasswordManager();
 	~PasswordManager();
 
