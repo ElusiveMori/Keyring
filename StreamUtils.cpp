@@ -3,7 +3,7 @@
 
 template <typename T>
 T ReadType(std::istream& stream) {
-	static_assert(std::is_arithmetic<T>, "Type is not arithmetic.");
+	static_assert(std::is_arithmetic<T>::value, "Type is not arithmetic.");
 	T read;
 	if (stream.read(reinterpret_cast<char*>(&read), sizeof(T)))
 		return read;
@@ -24,9 +24,9 @@ std::string ReadType(std::istream& stream) {
 
 template <typename T>
 void WriteType(std::ostream& stream, T write) {
-	static_assert(std::is_arithmetic<T>, "Type is not arithmetic.");
+	static_assert(std::is_arithmetic<T>::value, "Type is not arithmetic.");
 	if (!stream.write(reinterpret_cast<char*>(&write), sizeof(T)))
-		throw std::runtime_error("Stream is in a bad state.")
+		throw std::runtime_error("Stream is in a bad state.");
 }
 
 template<>

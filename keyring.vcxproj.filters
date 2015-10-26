@@ -21,19 +21,19 @@
     <ClCompile Include="KeyRing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PasswordCategory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PasswordEntry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CategoryManager.cpp">
+    <ClCompile Include="Security.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Security.cpp">
+    <ClCompile Include="PasswordManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,19 +41,19 @@
     <ClInclude Include="KeyRing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PasswordCategory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PasswordEntry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategoryManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Security.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PasswordManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

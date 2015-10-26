@@ -29,10 +29,10 @@ void PasswordManager::RemoveEntry(size_t index) {
 
 void PasswordManager::SortByTag() {
 	std::stable_sort(m_entries.begin(), m_entries.end(),
-		[](const PasswordEntry& a, const PasswordEntry& b) { a.GetTag() > b.GetTag(); });
+		[](const PasswordEntry& a, const PasswordEntry& b)->bool{ a.GetTag() > b.GetTag(); });
 }
 
 void PasswordManager::SortByUsername() {
 	std::stable_sort(m_entries.begin(), m_entries.end(),
-		[](const PasswordEntry& a, const PasswordEntry& b) { a.GetUsername() > b.GetUsername(); });
+		[](const PasswordEntry& a, const PasswordEntry& b)->bool{ a.GetUsername() > b.GetUsername(); });
 }

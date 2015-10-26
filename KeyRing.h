@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CategoryManager.h"
 #include "Security.h"
 
 class KeyRing
@@ -10,5 +9,5 @@ public:
 	~KeyRing();
 
 private:
-	CategoryManager m_manager;
+//	CategoryManager m_manager;
 };
