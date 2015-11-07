@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B0D6734D-91F6-4288-A334-60F40B0FE43D}</ProjectGuid>
+    <ProjectGuid>{00A25420-70F6-4829-8318-BC5F203791E5}</ProjectGuid>
     <RootNamespace>keyring</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -39,12 +39,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\files\work\cpp\boost_1_57_0;D:\files\work\cpp\cryptopp;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\files\work\cpp\keyring\keyring;D:\files\work\cpp\cryptopp\Win32\Output\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <IncludePath>d:\files\work\cpp\cryptopp\;d:\files\work\cpp\boost_1_57_0\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>D:\files\work\cpp\boost_1_57_0;D:\files\work\cpp\cryptopp;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\files\work\cpp\keyring\keyring;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <IncludePath>d:\files\work\cpp\cryptopp\;d:\files\work\cpp\boost_1_57_0\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -55,49 +55,53 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>cryptlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>cryptlib-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>cryptlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>cryptlib-release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ConsoleInterface.cpp">
+    <ClInclude Include="ConsoleControls.h" />
+    <ClInclude Include="ConsoleScreen.h" />
+    <ClInclude Include="ConsoleStates.h" />
+    <ClInclude Include="Enums.h" />
+    <ClInclude Include="KeyRing.h" />
+    <ClInclude Include="PasswordEntry.h" />
+    <ClInclude Include="PasswordManager.h" />
+    <ClInclude Include="Security.h" />
+    <ClInclude Include="StreamUtils.h" />
+    <ClInclude Include="_ConsoleInterface.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ConsoleControls.cpp" />
+    <ClCompile Include="ConsoleScreen.cpp" />
     <ClCompile Include="KeyRing.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PasswordEntry.cpp" />
     <ClCompile Include="PasswordManager.cpp" />
     <ClCompile Include="Security.cpp" />
     <ClCompile Include="StreamUtils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ConsoleInterface.h">
+    <ClCompile Include="_ConsoleInterface.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="KeyRing.h" />
-    <ClInclude Include="PasswordEntry.h" />
-    <ClInclude Include="PasswordManager.h" />
-    <ClInclude Include="Security.h" />
-    <ClInclude Include="StreamUtils.h" />
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

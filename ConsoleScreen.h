@@ -9,7 +9,7 @@
 class ConsoleControls;
 
 const int ScreenWidth = 80;
-const int ScreenHeight = 30;
+const int ScreenHeight = 25;
 
 class ConsoleScreen {
 	/* current screen state */
@@ -56,14 +56,18 @@ class ConsoleScreen {
 	   this is the entry being viewed */
 	const PasswordEntry* m_entry = nullptr;
 
-	/* writes a string starting at the specified row*/
-	void WriteRow(int, const std::string&);
+	/* writes a string starting at the specified row
+	   returns the number of rows written to */
+	int WriteRow(int, const std::string&);
 
 	/* clears the specified row */
 	void ClearRow(int);
 
 	/* sets whether a row is highlighted or not */
 	void SetHighlightRow(int, bool);
+
+	/* resets the screen highlighting */
+	void ClearScreenHighlight();
 public:
 	ScreenState GetState() const;
 	void SwitchState(ScreenState);

@@ -4,10 +4,5 @@
 
 int main() {
 //	KeyRing obj;
-	try {
-		ConsoleControls c;
-	}
-	catch (...) {
-		exit(999);
-	}
+	ConsoleControls c;
 }
