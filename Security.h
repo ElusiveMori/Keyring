@@ -34,6 +34,6 @@ namespace Security {
 	void WriteSize(std::ostream&, size_t);
 	void WriteString(std::ostream&, const std::string&);
 
-	const int32_t passwordIterations = 10000;
+	const int32_t passwordIterations = 100000;
 };
 

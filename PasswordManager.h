@@ -3,8 +3,7 @@
 #include <vector>
 #include "PasswordEntry.h"
 
-class PasswordManager
-{
+class PasswordManager {
 public:
 	PasswordManager();
 	~PasswordManager();

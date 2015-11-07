@@ -2,8 +2,7 @@
 
 #include "Security.h"
 
-class KeyRing
-{
+class KeyRing {
 public:
 	KeyRing();
 	~KeyRing();

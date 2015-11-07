@@ -2,8 +2,7 @@
 
 #include <string>
 
-class PasswordEntry
-{
+class PasswordEntry {
 public:
 	PasswordEntry(const std::string&, const std::string&, const std::string&);
 	~PasswordEntry();

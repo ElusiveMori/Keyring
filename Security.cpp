@@ -17,9 +17,13 @@ bool Security::LoadCategories(std::istream& in, PasswordManager& manager, const 
 
 		DeriveKey(password, salt, AES::MAX_KEYLENGTH, key, AES::MAX_KEYLENGTH);
 
-		size_t start = in.tellg();
-		size_t end = in.seekg(0, in.end).tellg();
-		size_t size = end - start;
+		auto start = in.tellg();
+		auto end = in.seekg(0, in.end).tellg();
+
+		if (start < 0 || end < 0)
+			throw std::runtime_error("Unknown stream error.");
+
+		size_t size = static_cast<size_t>(abs(end - start));
 		in.seekg(start);
 
 		std::unique_ptr<char[]> cipheredData(new char[size]);
