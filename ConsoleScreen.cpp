@@ -1,6 +1,7 @@
 #include "ConsoleScreen.h"
+#include "Constants.h"
 
-ConsoleScreen::ConsoleScreen(ConsoleControls& controller) : m_controller(controller) {
+ConsoleScreen::ConsoleScreen() {
 	SECURITY_ATTRIBUTES attrib;
 	attrib.nLength = sizeof(SECURITY_ATTRIBUTES);
 	attrib.bInheritHandle = false;
@@ -41,12 +42,13 @@ ConsoleScreen::ConsoleScreen(ConsoleControls& controller) : m_controller(control
 	SetConsoleActiveScreenBuffer(m_hConOut);
 
 	/* here we abuse the fact that the console window
-	   won't allow to be larger than it's underlying
-	   buffer allows, so it just sets it to the maximum
-	   possible size */
+	won't allow to be larger than it's underlying
+	buffer allows, so it just sets it to the maximum
+	possible size */
 	MoveWindow(m_hConWindow, 0, 0, 1000, 1000, TRUE);
 
 	ClearScreenHighlight();
+	HideCursor();
 }
 
 ConsoleScreen::~ConsoleScreen() {
@@ -57,56 +59,12 @@ ConsoleScreen::~ConsoleScreen() {
 	CloseHandle(m_hConOut);
 }
 
-ScreenState ConsoleScreen::GetState() const { return m_state; }
-
-void ConsoleScreen::SetOptionList(std::vector<std::string>&& options) {
-	m_options = options;
-	Draw();
-}
-
-void ConsoleScreen::SetEntry(const PasswordEntry* entry) {
-	m_entry = entry;
-	Draw();
-}
-
-void ConsoleScreen::SwitchState(ScreenState state) {
-	m_state = state;
-
-	Draw();
-}
-
-void ConsoleScreen::SetObfuscateInput(bool b) { m_obfuscateInput = b; Draw(); }
-void ConsoleScreen::SetFooter(const std::string& str) { m_footer = str; Draw(); }
-void ConsoleScreen::SetHeader(const std::string& str) { m_header = str; Draw(); }
-
-void ConsoleScreen::Draw() {
-	int x = 0, y = 0;
-
-	DWORD written;
-	COORD pos; pos.X = 0; pos.Y = 0;
-	/* draw the header */
-	switch (m_state) {
-	case VIEW_OPTION_LIST:
-	case INPUT_STRING: {
-			y = WriteRow(y, m_header) + 1;
-			break;
-		}
-	default:
-		break;
-	}
-
-	/* draw the footer */
-	WriteRow(ScreenHeight - 1, m_footer);
-
-	switch (m_state) {
-	case VIEW_OPTION_LIST:
-	default:
-		break;
-	}
-}
-
 int ConsoleScreen::WriteRow(int row, const std::string& str) {
-	int rows = str.length() / ScreenWidth;
+	int rows = str.length() / ScreenWidth + 1;
+	
+	for (int i = 0; i < rows; i++)
+		ClearRow(row + i);
+
 	DWORD written;
 	COORD pos; pos.X = 0; pos.Y = row;
 	FillConsoleOutputAttribute(m_hConOut, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY, rows * ScreenWidth, pos, &written);
@@ -115,7 +73,7 @@ int ConsoleScreen::WriteRow(int row, const std::string& str) {
 }
 
 void ConsoleScreen::SetHighlightRow(int row, bool b) {
-	DWORD flag = b ? (BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_INTENSITY) : (FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	WORD flag = b ? (BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_INTENSITY) : (FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 	DWORD written;
 	COORD pos; pos.X = 0; pos.Y = row;
 	FillConsoleOutputAttribute(m_hConOut, flag, ScreenWidth, pos, &written);
@@ -132,4 +90,42 @@ void ConsoleScreen::ClearScreenHighlight() {
 	DWORD written;
 	COORD pos; pos.X = 0; pos.Y = 0;
 	FillConsoleOutputAttribute(m_hConOut, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY, ScreenWidth * ScreenHeight, pos, &written);
+}
+
+void ConsoleScreen::HideCursor() {
+	CONSOLE_CURSOR_INFO info;
+	info.bVisible = false;
+	info.dwSize = 1;
+
+	SetConsoleCursorInfo(m_hConOut, &info);
+}
+
+bool ValidChar(unsigned short c) {
+	return (c > 31 && c < 127);
+}
+
+void ConsoleScreen::ProcessInput(KeyPress& keyPress) {
+	while (true) {
+		INPUT_RECORD record;
+		DWORD numRead;
+		if (!ReadConsoleInput(m_hConIn, &record, 1, &numRead)) {
+			throw std::runtime_error("Failed to read from console input.");
+		}
+
+		if (record.EventType == KEY_EVENT) {
+			if (record.Event.KeyEvent.bKeyDown) {
+				unsigned short c = record.Event.KeyEvent.uChar.AsciiChar;
+				if (!ValidChar(c)) {
+					keyPress.isVirtual = true;
+					keyPress.key.virtualCode = record.Event.KeyEvent.wVirtualKeyCode;
+				} else {
+					keyPress.isVirtual = false;
+					keyPress.key.charCode = c;
+				}
+
+				return;
+			}
+		}
+	}
+
 }

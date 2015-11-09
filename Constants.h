@@ -11,3 +11,6 @@ enum OptionType {
 	OPTION_NO,
 	OPTION_ENTRY,
 };
+
+const int ScreenWidth = 80;
+const int ScreenHeight = 25;

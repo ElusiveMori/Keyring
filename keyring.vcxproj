@@ -75,22 +75,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ConsoleControls.h" />
+    <ClInclude Include="ConsoleInterface.h" />
     <ClInclude Include="ConsoleScreen.h" />
     <ClInclude Include="ConsoleStates.h" />
-    <ClInclude Include="Enums.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="KeyRing.h" />
     <ClInclude Include="PasswordEntry.h" />
     <ClInclude Include="PasswordManager.h" />
     <ClInclude Include="Security.h" />
     <ClInclude Include="StreamUtils.h" />
-    <ClInclude Include="_ConsoleInterface.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ConsoleControls.cpp" />
+    <ClCompile Include="ConsoleInterface.cpp" />
     <ClCompile Include="ConsoleScreen.cpp" />
     <ClCompile Include="KeyRing.cpp" />
     <ClCompile Include="main.cpp" />
@@ -98,10 +94,6 @@
     <ClCompile Include="PasswordManager.cpp" />
     <ClCompile Include="Security.cpp" />
     <ClCompile Include="StreamUtils.cpp" />
-    <ClCompile Include="_ConsoleInterface.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

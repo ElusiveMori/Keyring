@@ -13,66 +13,74 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Console">
+      <UniqueIdentifier>{ab2b70b3-95a5-4000-b49c-9ba086600939}</UniqueIdentifier>
+      <Extensions>
+      </Extensions>
+    </Filter>
+    <Filter Include="Header Files\Security">
+      <UniqueIdentifier>{a1df4e95-a630-4930-ad20-bb71639185f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Console">
+      <UniqueIdentifier>{7568a4b2-9736-4292-a0db-79409ef40679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Security">
+      <UniqueIdentifier>{5edce45d-f513-47db-bda3-7bcd088a3f60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="_ConsoleInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleControls.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ConsoleInterface.h">
+      <Filter>Header Files\Console</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleScreen.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Console</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleStates.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Console</Filter>
     </ClInclude>
-    <ClInclude Include="Enums.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Constants.h">
+      <Filter>Header Files\Console</Filter>
     </ClInclude>
     <ClInclude Include="KeyRing.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Security</Filter>
     </ClInclude>
     <ClInclude Include="PasswordEntry.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Security</Filter>
     </ClInclude>
     <ClInclude Include="PasswordManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Security</Filter>
     </ClInclude>
     <ClInclude Include="Security.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Security</Filter>
     </ClInclude>
     <ClInclude Include="StreamUtils.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Security</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="_ConsoleInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsoleControls.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsoleScreen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyRing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleInterface.cpp">
+      <Filter>Source Files\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleScreen.cpp">
+      <Filter>Source Files\Console</Filter>
+    </ClCompile>
     <ClCompile Include="PasswordEntry.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Security</Filter>
     </ClCompile>
     <ClCompile Include="PasswordManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Security.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Security</Filter>
     </ClCompile>
     <ClCompile Include="StreamUtils.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Security</Filter>
+    </ClCompile>
+    <ClCompile Include="Security.cpp">
+      <Filter>Source Files\Security</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyRing.cpp">
+      <Filter>Source Files\Security</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

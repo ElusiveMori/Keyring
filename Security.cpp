@@ -134,7 +134,7 @@ void Security::Serialize(const PasswordManager& manager, std::ostream& stream) {
 
 	WriteType(stream, static_cast<uint16_t>(entries.size()));
 
-	for (auto&& entry = entries.begin(); entry != entries.end(); ++entry) {
+	for (auto& entry = entries.begin(); entry != entries.end(); ++entry) {
 		WriteType(stream, entry->GetTag());
 		WriteType(stream, entry->GetUsername());
 		WriteType(stream, entry->GetPassword());
@@ -145,7 +145,7 @@ size_t Security::GetSerializedSize(const PasswordManager& manager) {
 	size_t size = 4; // entry count
 	const auto& entries = manager.GetEntries();
 
-	for (auto&& entry : entries)
+	for (auto& entry : entries)
 		size += entry.GetTag().size() + entry.GetUsername().size() + entry.GetPassword().size() + 12; // username string + password string + 3 string sizes
 
 	return size;
