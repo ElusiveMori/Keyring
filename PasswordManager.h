@@ -15,6 +15,9 @@ public:
 
 	void SortByTag();
 	void SortByUsername();
+
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version);
 private:
 	std::vector<PasswordEntry> m_entries;
 };

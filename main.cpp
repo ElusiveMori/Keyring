@@ -3,12 +3,17 @@
 #include "ConsoleInterface.h"
 
 int main() {
-	ConsoleInterface c;
-	c.SetHeader("Header.");
-	c.SetFooter("Footer.");
-	c.SetOptionList({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" });
-	c.SwitchState(VIEW_OPTION_LIST);
-	c.Draw();
+	PasswordManager pm;
+	pm.AddEntry("1", "2", "3");
+	pm.AddEntry("1", "2", "3");
+	pm.AddEntry("1", "2", "3");
+	pm.AddEntry("1", "2", "3");
 
-	c.InputLoop();
+	std::stringstream str;
+
+	Security::SaveManager(str, pm, "pootis");
+	
+	PasswordManager pm2;
+
+	Security::LoadManager(str, pm2, "pootis");
 }

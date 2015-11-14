@@ -1,5 +1,8 @@
 #include <algorithm>
 #include "PasswordManager.h"
+#include <boost/serialization/vector.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 PasswordManager::PasswordManager() : m_entries() {}
 
@@ -36,3 +39,11 @@ void PasswordManager::SortByUsername() {
 	std::stable_sort(m_entries.begin(), m_entries.end(),
 		[](const PasswordEntry& a, const PasswordEntry& b)->bool{ return a.GetUsername() > b.GetUsername(); });
 }
+
+template<class Archive>
+void PasswordManager::serialize(Archive& ar, const unsigned int version) {
+	ar & m_entries;
+}
+
+template void PasswordManager::serialize<boost::archive::text_oarchive>(boost::archive::text_oarchive&, const unsigned int);
+template void PasswordManager::serialize<boost::archive::text_iarchive>(boost::archive::text_iarchive&, const unsigned int);

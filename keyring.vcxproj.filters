@@ -53,9 +53,6 @@
     <ClInclude Include="Security.h">
       <Filter>Header Files\Security</Filter>
     </ClInclude>
-    <ClInclude Include="StreamUtils.h">
-      <Filter>Header Files\Security</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -71,9 +68,6 @@
       <Filter>Source Files\Security</Filter>
     </ClCompile>
     <ClCompile Include="PasswordManager.cpp">
-      <Filter>Source Files\Security</Filter>
-    </ClCompile>
-    <ClCompile Include="StreamUtils.cpp">
       <Filter>Source Files\Security</Filter>
     </ClCompile>
     <ClCompile Include="Security.cpp">
