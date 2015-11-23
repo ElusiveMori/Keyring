@@ -30,18 +30,18 @@ bool Security::LoadManager(std::istream& in, PasswordManager& manager, const std
 
 		std::unique_ptr<char[]> cipheredData(new char[size]);
 		std::unique_ptr<char[]> decipheredData(new char[size]);
-		
+
 		decoded.read(cipheredData.get(), size);
 
 		DecipherData(reinterpret_cast<byte*>(cipheredData.get()), reinterpret_cast<byte*>(decipheredData.get()), size, key, AES::MAX_KEYLENGTH, iv, AES::BLOCKSIZE);
-		
+
 		if (CompareHash(hash, reinterpret_cast<byte*>(decipheredData.get()), size)) {
 			std::stringstream stream;
 			stream.write(decipheredData.get(), size);
 			boost::archive::text_iarchive ar(stream);
 			ar & manager;
 
-		 	return true;
+			return true;
 		}
 		else {
 			return false;

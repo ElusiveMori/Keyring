@@ -23,8 +23,14 @@ class ConsoleScreen {
 	/* handle to the console input */
 	HANDLE m_hConIn = NULL;
 
-	/* handle to our own screen buffer */
+	/* I use two buffers here to circumvent screen flickering
+	   while drawing to the screen. m_hConOut is the buffer
+	   that's currently being drawn to. After a single draw
+	   operation completes, the active screen buffer is set
+	   to m_hConOut, and these handles are swapped */
+
 	HANDLE m_hConOut = NULL;
+	HANDLE m_hConBackBuf = NULL;
 
 	/* handle to the console screen window */
 	HWND m_hConWindow = NULL;
@@ -47,6 +53,9 @@ public:
 	/* processes input and writes a single key
 	   to the passed variable */
 	void ProcessInput(KeyPress&);
+
+	/* swaps m_hConOut and m_hConBackBuf */
+	void SwapBuffers();
 
 	ConsoleScreen();
 	~ConsoleScreen();

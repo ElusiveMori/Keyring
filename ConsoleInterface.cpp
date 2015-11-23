@@ -1,10 +1,8 @@
 #include "ConsoleInterface.h"
 
-ConsoleInterface::ConsoleInterface() {
-}
+ConsoleInterface::ConsoleInterface() {}
 
-ConsoleInterface::~ConsoleInterface() {
-}
+ConsoleInterface::~ConsoleInterface() {}
 
 ScreenState ConsoleInterface::GetState() const { return m_state; }
 
@@ -13,8 +11,8 @@ void ConsoleInterface::SetOptionList(std::vector<std::string>&& options) {
 	m_selectedOption = 0;
 	m_scrollOffset = 0;
 
-	for (auto& str : m_options) 
-		if (str.length() > ScreenWidth) 
+	for (auto& str : m_options)
+		if (str.length() > ScreenWidth)
 			str.resize(ScreenWidth);
 
 	Draw();
@@ -41,13 +39,14 @@ void ConsoleInterface::Draw() {
 
 	// draw the header
 	switch (m_state) {
-	case VIEW_OPTION_LIST:
-	case INPUT_STRING: {
+		case VIEW_OPTION_LIST:
+		case INPUT_STRING:
+		{
 			y = m_screen.WriteRow(y, m_header) + 1;
 			break;
 		}
-	default:
-		break;
+		default:
+			break;
 	}
 
 	// draw the footer
@@ -56,17 +55,20 @@ void ConsoleInterface::Draw() {
 	int availableRows = GetAvailableRows();
 
 	switch (m_state) {
-	case VIEW_OPTION_LIST: {
-		for (int i = m_scrollOffset, j = 0; i < m_options.size() && i < availableRows; ++i, ++j) {
-			const auto& str = m_options[i];
-			m_screen.WriteRow(j + y, str);
-		}
+		case VIEW_OPTION_LIST:
+		{
+			for (int i = m_scrollOffset, j = 0; i < m_options.size() && j < availableRows; ++i, ++j) {
+				const auto& str = m_options[i];
+				m_screen.WriteRow(j + y, str);
+			}
 
-		m_screen.SetHighlightRow(m_selectedOption - m_scrollOffset + y, true);
+			m_screen.SetHighlightRow(m_selectedOption - m_scrollOffset + y, true);
+		}
+		default:
+			break;
 	}
-	default:
-		break;
-	}
+
+	m_screen.SwapBuffers();
 }
 
 int ConsoleInterface::GetAvailableRows() {
@@ -77,27 +79,79 @@ void ConsoleInterface::InputLoop() {
 	while (true) {
 		KeyPress keyPress;
 		m_screen.ProcessInput(keyPress);
-		std::string str;
-		if (keyPress.isVirtual) {
-			switch (keyPress.key.virtualCode) {
-			case VK_RETURN:
-				str += "return";
+
+		if (keyPress.isVirtual && keyPress.key.virtualCode == VK_ESCAPE)
+			return;
+
+		switch (m_state) {
+			case INPUT_STRING:
+			{
+				if (keyPress.isVirtual) {
+					switch (keyPress.key.virtualCode) {
+						case VK_RETURN:
+							// clear string and return to controlling state
+							break;
+						case VK_BACK:
+						{
+							if (m_input.size() > 0)
+								m_input.pop_back();
+							break;
+						}
+					}
+				}
+				else {
+					if (m_input.size() < MaxInputLength)
+						m_input.push_back(keyPress.key.charCode);
+				}
+
 				break;
-			case VK_BACK:
-				str += "backspace";
-				break;
-			case VK_UP:
-				str += "arrow up";
-				break;
-			case VK_DOWN:
-				str += "arrow down";
-				break;
-			case VK_ESCAPE:
-				return;
 			}
-		} else {
-			str += keyPress.key.charCode;
+			case VIEW_OPTION_LIST:
+			{
+				if (keyPress.isVirtual) {
+					switch (keyPress.key.virtualCode) {
+						case VK_UP:
+						{
+							if (m_selectedOption > 0) {
+								if (m_selectedOption == m_scrollOffset)
+									m_scrollOffset--;
+
+								m_selectedOption--;
+							}
+
+							break;
+						}						
+						case VK_DOWN:
+						{
+							if (m_selectedOption < m_options.size() - 1) {
+								if (m_selectedOption == (m_scrollOffset + GetAvailableRows() - 1))
+									m_scrollOffset++;
+
+								m_selectedOption++;
+							}
+
+							break;
+						}
+						case VK_RETURN:
+						{
+							// return selection to controlling state
+
+							break;
+						}
+					}
+				}
+				else {
+
+				}
+
+				break;
+			}
+			case VIEW_DATA:
+			{
+				break;
+			}
 		}
-		SetFooter(str);
+	
+		Draw();
 	}
 }

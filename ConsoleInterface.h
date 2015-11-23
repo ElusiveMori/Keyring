@@ -35,7 +35,7 @@ class ConsoleInterface {
 	   actual contents */
 	bool m_obfuscateInput = false;
 
-	/* used when the screen state is VIEW_ENTRY 
+	/* used when the screen state is VIEW_DATA 
 	   this is the entry being viewed */
 	const PasswordEntry* m_entry = nullptr;
 

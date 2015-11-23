@@ -19,6 +19,10 @@ ConsoleScreen::ConsoleScreen() {
 		throw std::runtime_error("Could not create the console screen buffer.");
 	}
 
+	if ((m_hConBackBuf = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, &attrib, CONSOLE_TEXTMODE_BUFFER, NULL)) == INVALID_HANDLE_VALUE) {
+		throw std::runtime_error("Could not create the console screen buffer.");
+	}
+
 	if ((m_hConWindow = GetConsoleWindow()) == NULL) {
 		throw std::runtime_error("Could not acquire the console screen window.");
 	}
@@ -26,6 +30,7 @@ ConsoleScreen::ConsoleScreen() {
 	GetConsoleMode(m_hConIn, &m_oldInMode);
 	SetConsoleMode(m_hConIn, ENABLE_PROCESSED_INPUT | ENABLE_WINDOW_INPUT);
 	SetConsoleMode(m_hConOut, 0);
+	SetConsoleMode(m_hConBackBuf, 0);
 
 	COORD size;
 	size.X = ScreenWidth;
@@ -39,7 +44,10 @@ ConsoleScreen::ConsoleScreen() {
 
 	SetConsoleWindowInfo(m_hConOut, TRUE, &window);
 	SetConsoleScreenBufferSize(m_hConOut, size);
-	SetConsoleActiveScreenBuffer(m_hConOut);
+
+	SetConsoleWindowInfo(m_hConBackBuf, TRUE, &window);
+	SetConsoleScreenBufferSize(m_hConBackBuf, size);
+	SetConsoleActiveScreenBuffer(m_hConBackBuf);
 
 	/* here we abuse the fact that the console window
 	won't allow to be larger than it's underlying
@@ -57,6 +65,7 @@ ConsoleScreen::~ConsoleScreen() {
 	CloseHandle(m_hOldScreenBuf);
 	CloseHandle(m_hConIn);
 	CloseHandle(m_hConOut);
+	CloseHandle(m_hConBackBuf);
 }
 
 int ConsoleScreen::WriteRow(int row, const std::string& str) {
@@ -98,6 +107,7 @@ void ConsoleScreen::HideCursor() {
 	info.dwSize = 1;
 
 	SetConsoleCursorInfo(m_hConOut, &info);
+	SetConsoleCursorInfo(m_hConBackBuf, &info);
 }
 
 bool ValidChar(unsigned short c) {
@@ -128,4 +138,12 @@ void ConsoleScreen::ProcessInput(KeyPress& keyPress) {
 		}
 	}
 
+}
+
+void ConsoleScreen::SwapBuffers() {
+	SetConsoleActiveScreenBuffer(m_hConOut);
+
+	HANDLE tmp = m_hConOut;
+	m_hConOut = m_hConBackBuf;
+	m_hConBackBuf = tmp;
 }

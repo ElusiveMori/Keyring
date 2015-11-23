@@ -3,17 +3,14 @@
 #include "ConsoleInterface.h"
 
 int main() {
-	PasswordManager pm;
-	pm.AddEntry("1", "2", "3");
-	pm.AddEntry("1", "2", "3");
-	pm.AddEntry("1", "2", "3");
-	pm.AddEntry("1", "2", "3");
+	ConsoleInterface con;
 
-	std::stringstream str;
+	std::vector<std::string> vec;
 
-	Security::SaveManager(str, pm, "pootis");
-	
-	PasswordManager pm2;
+	for (int i = 0; i < 100; i++) vec.push_back(std::to_string(i) + ". Something.");
 
-	Security::LoadManager(str, pm2, "pootis");
+	con.SetOptionList(std::move(vec));
+	con.SwitchState(VIEW_OPTION_LIST);
+
+	con.InputLoop();
 }
