@@ -15,15 +15,13 @@ void ConsoleInterface::SetOptionList(std::vector<std::string>&& options) {
 	for (auto& str : m_options)
 		if (str.length() > SCREEN_WIDTH)
 			str.resize(SCREEN_WIDTH);
-
-	Draw();
 }
 
-void ConsoleInterface::SetEntry(const PasswordEntry* entry) { m_entry = entry; Draw(); }
-void ConsoleInterface::SwitchState(ScreenState state)       { m_state = state; Draw(); }
-void ConsoleInterface::SetObfuscateInput(bool b)            { m_obfuscateInput = b; Draw(); }
-void ConsoleInterface::SetFooter(const std::string& str)    { m_footer = str; Draw(); }
-void ConsoleInterface::SetHeader(const std::string& str)    { m_header = str; Draw(); }
+void ConsoleInterface::SetEntry(const PasswordEntry* entry) { m_entry = entry; }
+void ConsoleInterface::SwitchState(ScreenState state)       { m_state = state; }
+void ConsoleInterface::SetObfuscateInput(bool b)            { m_obfuscateInput = b; }
+void ConsoleInterface::SetFooter(const std::string& str)    { m_footer = str; }
+void ConsoleInterface::SetHeader(const std::string& str)    { m_header = str; }
 
 void ConsoleInterface::Draw() {
 	m_screen.ClearScreen();
