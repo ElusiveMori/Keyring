@@ -141,7 +141,7 @@ void ConsoleInterface::InputLoop() {
 						}						
 						case VK_DOWN:
 						{
-							if (m_selectedOption < m_options.size() - 1) {
+							if (m_options.size() > 0 && m_selectedOption < m_options.size() - 1) {
 								if (m_selectedOption == (m_scrollOffset + GetAvailableRows() - 1))
 									m_scrollOffset++;
 
