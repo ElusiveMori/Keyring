@@ -7,5 +7,6 @@ int main() {
 	KeyRing key;
 
 	key.PushState(new ConState::LoadDB(key));
+	key.GetInterface().Draw();
 	key.GetInterface().InputLoop();
 }
