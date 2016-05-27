@@ -1,13 +1,23 @@
 #pragma once
 
-#include "Constants.h"
 #include "PasswordManager.h"
 #include "ConsoleScreen.h"
 #include <string>
 #include <vector>
 #include <Windows.h>
 
+class KeyRing;
+
+enum ScreenState {
+	VIEW_OPTION_LIST,
+	VIEW_DATA,
+	INPUT_STRING,
+};
+
 class ConsoleInterface {
+	/* keyring parent */
+	KeyRing& m_keyring;
+
 	/* screen wrapper */
 	ConsoleScreen m_screen;
 
@@ -50,7 +60,7 @@ public:
 	void SetFooter(const std::string&);
 	void SetHeader(const std::string&);
 
-	/* redraws the screen
+	/* redraws the screen;
 	 * based on the screen state, this will
 	 * will produce different results */ 
 	void Draw();
@@ -63,6 +73,6 @@ public:
 
 	void InputLoop();
 
-	ConsoleInterface();
+	ConsoleInterface(KeyRing&);
 	~ConsoleInterface();
 };

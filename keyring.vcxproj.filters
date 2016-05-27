@@ -27,6 +27,9 @@
     <Filter Include="Source Files\Security">
       <UniqueIdentifier>{5edce45d-f513-47db-bda3-7bcd088a3f60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Console\ConsoleStates">
+      <UniqueIdentifier>{b61eb546-d411-469c-9b43-4f0f6d04d64d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleInterface.h">
@@ -38,12 +41,6 @@
     <ClInclude Include="ConsoleStates.h">
       <Filter>Header Files\Console</Filter>
     </ClInclude>
-    <ClInclude Include="Constants.h">
-      <Filter>Header Files\Console</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyRing.h">
-      <Filter>Header Files\Security</Filter>
-    </ClInclude>
     <ClInclude Include="PasswordEntry.h">
       <Filter>Header Files\Security</Filter>
     </ClInclude>
@@ -52,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="Security.h">
       <Filter>Header Files\Security</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyRing.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -73,8 +73,14 @@
     <ClCompile Include="Security.cpp">
       <Filter>Source Files\Security</Filter>
     </ClCompile>
+    <ClCompile Include="LoadDB.cpp">
+      <Filter>Source Files\Console\ConsoleStates</Filter>
+    </ClCompile>
     <ClCompile Include="KeyRing.cpp">
-      <Filter>Source Files\Security</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Base.cpp">
+      <Filter>Source Files\Console\ConsoleStates</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

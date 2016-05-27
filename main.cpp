@@ -1,16 +1,11 @@
 #include <iostream>
 #include "KeyRing.h"
 #include "ConsoleInterface.h"
+#include <boost/filesystem.hpp>
 
 int main() {
-	ConsoleInterface con;
+	KeyRing key;
 
-	std::vector<std::string> vec;
-
-	for (int i = 0; i < 100; i++) vec.push_back(std::to_string(i) + ". Something.");
-
-	con.SetOptionList(std::move(vec));
-	con.SwitchState(VIEW_OPTION_LIST);
-
-	con.InputLoop();
+	key.PushState(new ConState::LoadDB(key));
+	key.GetInterface().InputLoop();
 }

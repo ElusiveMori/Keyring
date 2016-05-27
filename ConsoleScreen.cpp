@@ -1,5 +1,4 @@
 #include "ConsoleScreen.h"
-#include "Constants.h"
 
 ConsoleScreen::ConsoleScreen() {
 	SECURITY_ATTRIBUTES attrib;
@@ -33,12 +32,12 @@ ConsoleScreen::ConsoleScreen() {
 	SetConsoleMode(m_hConBackBuf, 0);
 
 	COORD size;
-	size.X = ScreenWidth;
-	size.Y = ScreenHeight;
+	size.X = SCREEN_WIDTH;
+	size.Y = SCREEN_HEIGHT;
 
 	SMALL_RECT window;
-	window.Bottom = ScreenHeight;
-	window.Right = ScreenWidth;
+	window.Bottom = SCREEN_HEIGHT;
+	window.Right = SCREEN_WIDTH;
 	window.Top = 0;
 	window.Left = 0;
 
@@ -53,7 +52,7 @@ ConsoleScreen::ConsoleScreen() {
 	won't allow to be larger than it's underlying
 	buffer allows, so it just sets it to the maximum
 	possible size */
-	MoveWindow(m_hConWindow, 0, 0, 1000, 1000, TRUE);
+	MoveWindow(m_hConWindow, 0, 0, 10000, 10000, TRUE);
 
 	ClearScreenHighlight();
 	HideCursor();
@@ -69,36 +68,42 @@ ConsoleScreen::~ConsoleScreen() {
 }
 
 int ConsoleScreen::WriteRow(int row, const std::string& str) {
-	int rows = str.length() / ScreenWidth + 1;
+	int rows = str.length() / SCREEN_WIDTH + 1;
 	
 	for (int i = 0; i < rows; i++)
 		ClearRow(row + i);
 
 	DWORD written;
 	COORD pos; pos.X = 0; pos.Y = row;
-	FillConsoleOutputAttribute(m_hConOut, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY, rows * ScreenWidth, pos, &written);
+	FillConsoleOutputAttribute(m_hConOut, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY, rows * SCREEN_WIDTH, pos, &written);
 	WriteConsoleOutputCharacter(m_hConOut, str.c_str(), str.length(), pos, &written);
 	return rows;
+}
+
+void ConsoleScreen::WriteCell(int x, int y, char c) {
+	DWORD written;
+	COORD pos; pos.X = x; pos.Y = y;
+	FillConsoleOutputCharacter(m_hConOut, c, 1, pos, &written);
 }
 
 void ConsoleScreen::SetHighlightRow(int row, bool b) {
 	WORD flag = b ? (BACKGROUND_BLUE | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_INTENSITY) : (FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 	DWORD written;
 	COORD pos; pos.X = 0; pos.Y = row;
-	FillConsoleOutputAttribute(m_hConOut, flag, ScreenWidth, pos, &written);
+	FillConsoleOutputAttribute(m_hConOut, flag, SCREEN_WIDTH, pos, &written);
 }
 
 void ConsoleScreen::ClearRow(int row) {
 	DWORD written;
 	COORD pos; pos.X = 0; pos.Y = row;
-	FillConsoleOutputCharacter(m_hConOut, ' ', ScreenWidth, pos, &written);
+	FillConsoleOutputCharacter(m_hConOut, ' ', SCREEN_WIDTH, pos, &written);
 	SetHighlightRow(row, false);
 }
 
 void ConsoleScreen::ClearScreenHighlight() {
 	DWORD written;
 	COORD pos; pos.X = 0; pos.Y = 0;
-	FillConsoleOutputAttribute(m_hConOut, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY, ScreenWidth * ScreenHeight, pos, &written);
+	FillConsoleOutputAttribute(m_hConOut, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY, SCREEN_WIDTH * SCREEN_HEIGHT, pos, &written);
 }
 
 void ConsoleScreen::HideCursor() {
@@ -119,6 +124,7 @@ void ConsoleScreen::ProcessInput(KeyPress& keyPress) {
 		INPUT_RECORD record;
 		DWORD numRead;
 		if (!ReadConsoleInput(m_hConIn, &record, 1, &numRead)) {
+			DWORD err = GetLastError();
 			throw std::runtime_error("Failed to read from console input.");
 		}
 
@@ -146,4 +152,12 @@ void ConsoleScreen::SwapBuffers() {
 	HANDLE tmp = m_hConOut;
 	m_hConOut = m_hConBackBuf;
 	m_hConBackBuf = tmp;
+}
+
+void ConsoleScreen::ClearScreen() {
+	ClearScreenHighlight();
+
+	DWORD written;
+	COORD pos; pos.X = 0; pos.Y = 0;
+	FillConsoleOutputCharacter(m_hConOut, ' ', SCREEN_WIDTH * SCREEN_HEIGHT, pos, &written);
 }

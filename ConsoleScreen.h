@@ -2,14 +2,11 @@
 
 #include <Windows.h>
 #include <string>
+#include "KeyPress.h"
 
-struct KeyPress {
-	bool isVirtual;
-	union {
-		CHAR charCode;
-		WORD virtualCode;
-	} key;
-};
+#define MAX_INPUT_LENGTH 64
+#define SCREEN_WIDTH 80
+#define SCREEN_HEIGHT 25
 
 class ConsoleScreen {
 	/* previous console input mode, class restores to this after being destroyed */
@@ -37,16 +34,21 @@ class ConsoleScreen {
 public:
 	/* writes a string starting at the specified row
 	returns the number of rows written to */
-	int WriteRow(int, const std::string&);
+	int WriteRow(int y, const std::string& str);
+
+	/* writes a single character to a single cell */
+	void WriteCell(int x, int y, char c);
 
 	/* clears the specified row */
-	void ClearRow(int);
+	void ClearRow(int y);
 
 	/* sets whether a row is highlighted or not */
-	void SetHighlightRow(int, bool);
+	void SetHighlightRow(int y, bool highlight);
 
 	/* resets the screen highlighting */
 	void ClearScreenHighlight();
+
+	void ClearScreen();
 
 	void HideCursor();
 

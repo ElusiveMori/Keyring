@@ -78,16 +78,17 @@
     <ClInclude Include="ConsoleInterface.h" />
     <ClInclude Include="ConsoleScreen.h" />
     <ClInclude Include="ConsoleStates.h" />
-    <ClInclude Include="Constants.h" />
     <ClInclude Include="KeyRing.h" />
     <ClInclude Include="PasswordEntry.h" />
     <ClInclude Include="PasswordManager.h" />
     <ClInclude Include="Security.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Base.cpp" />
     <ClCompile Include="ConsoleInterface.cpp" />
     <ClCompile Include="ConsoleScreen.cpp" />
     <ClCompile Include="KeyRing.cpp" />
+    <ClCompile Include="LoadDB.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PasswordEntry.cpp" />
     <ClCompile Include="PasswordManager.cpp" />
